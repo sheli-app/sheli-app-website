@@ -82,4 +82,10 @@
       <image:loc>http://sheli.app/images/logo-txt2.svg</image:loc>
     </image:image>
   </url>
+  <url>
+    <loc>http://sheli.app/delete-account.html</loc>
+    <lastmod>2026-04-25</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
 </urlset>

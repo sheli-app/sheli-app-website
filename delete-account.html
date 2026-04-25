@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Request deletion of your SheliApp account and associated data."/>
+  <link rel="shortcut icon" href="images/sheli-app-favicon.ico"/>
+  <title>Delete Account — SheliApp</title>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:   #FDF8F0;
+      --cream2:  #F6EFDD;
+      --white:   #FFFFFF;
+      --accent:  #E87C50;
+      --accent2: #D4693E;
+      --dark:    #2C2414;
+      --text:    #3D3020;
+      --muted:   #7A6B55;
+      --border:  #EDE3CE;
+      --shadow:  0 4px 20px rgba(44,36,20,.08);
+      --radius:  14px;
+      --danger:  #C0392B;
+      --danger2: #A93226;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      line-height: 1.65;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; line-height: 1.15; }
+    h2 { font-size: clamp(1.2rem, 2.5vw, 1.6rem); font-weight: 700; line-height: 1.25; }
+    h3 { font-size: 1.05rem; font-weight: 700; }
+    p  { color: var(--muted); }
+
+    .container { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(253,248,240,.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 66px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .logo img.icon { width: 36px; height: 36px; border-radius: 8px; }
+    .logo img.txt  { height: 20px; }
+
+    .nav-home {
+      text-decoration: none;
+      font-size: .82rem;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--text);
+      padding: 6px 12px;
+      border-radius: 8px;
+      transition: background .2s, color .2s;
+    }
+    .nav-home:hover { background: var(--cream2); color: var(--accent); }
+
+    /* ── PAGE CONTENT ── */
+    main { flex: 1; padding: 64px 0 80px; }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .page-tag {
+      display: inline-block;
+      background: #fdecea;
+      border: 1px solid #f5c6c2;
+      color: var(--danger);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 100px;
+      margin-bottom: 18px;
+    }
+    .page-header h1 { color: var(--dark); margin-bottom: 14px; }
+    .page-header p { max-width: 560px; margin: 0 auto; font-size: 1.05rem; }
+
+    /* ── INFO CARDS ── */
+    .info-section { margin-bottom: 36px; }
+    .info-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+    .info-card h2 { color: var(--dark); margin-bottom: 14px; }
+    .info-card h3 { color: var(--dark); margin-bottom: 8px; margin-top: 18px; }
+    .info-card h3:first-of-type { margin-top: 0; }
+    .info-card p { margin-bottom: 10px; }
+    .info-card p:last-child { margin-bottom: 0; }
+
+    .step-list {
+      list-style: none;
+      counter-reset: steps;
+      margin-top: 14px;
+    }
+    .step-list li {
+      counter-increment: steps;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      color: var(--muted);
+    }
+    .step-list li:last-child { border-bottom: none; }
+    .step-list li::before {
+      content: counter(steps);
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      background: var(--cream2);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .8rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 14px;
+      font-size: .92rem;
+    }
+    .data-table th {
+      background: var(--cream2);
+      text-align: left;
+      padding: 10px 14px;
+      font-size: .8rem;
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border-bottom: 2px solid var(--border);
+    }
+    .data-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--muted);
+      vertical-align: top;
+    }
+    .data-table tr:last-child td { border-bottom: none; }
+    .badge {
+      display: inline-block;
+      padding: 2px 9px;
+      border-radius: 100px;
+      font-size: .75rem;
+      font-weight: 700;
+    }
+    .badge-deleted  { background: #fdecea; color: var(--danger); }
+    .badge-retained { background: #fef9e7; color: #b7770d; }
+
+    /* ── REQUEST FORM ── */
+    .form-card {
+      background: var(--white);
+      border: 2px solid #f5c6c2;
+      border-radius: var(--radius);
+      padding: 32px;
+      box-shadow: var(--shadow);
+    }
+    .form-card h2 { color: var(--dark); margin-bottom: 8px; }
+    .form-card > p { margin-bottom: 24px; }
+
+    .form-group { margin-bottom: 18px; }
+    .form-group label {
+      display: block;
+      font-size: .88rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: .95rem;
+      background: var(--cream);
+      color: var(--text);
+      transition: border-color .2s;
+      font-family: inherit;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+
+    .checkbox-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .checkbox-row input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      accent-color: var(--danger);
+      cursor: pointer;
+    }
+    .checkbox-row label {
+      font-size: .9rem;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .btn-danger {
+      width: 100%;
+      padding: 14px;
+      background: var(--danger);
+      color: var(--white);
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .2s, transform .15s;
+    }
+    .btn-danger:hover { background: var(--danger2); transform: translateY(-1px); }
+    .btn-danger:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+
+    .form-notice {
+      margin-top: 16px;
+      font-size: .84rem;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .alert {
+      display: none;
+      padding: 14px 16px;
+      border-radius: 10px;
+      font-size: .92rem;
+      margin-top: 18px;
+    }
+    .alert-success { background: #eafaf1; border: 1px solid #a9dfbf; color: #1e8449; }
+    .alert-error   { background: #fdecea; border: 1px solid #f5c6c2; color: var(--danger); }
+
+    /* ── DIVIDER ── */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 28px 0;
+      color: var(--muted);
+      font-size: .85rem;
+    }
+    .divider::before, .divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── IN-APP METHOD ── */
+    .in-app-card {
+      background: var(--cream2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 28px;
+    }
+    .in-app-card h3 { color: var(--dark); margin-bottom: 10px; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--dark);
+      color: rgba(255,255,255,.5);
+      padding: 28px 0;
+      text-align: center;
+      font-size: .85rem;
+    }
+    footer a { color: rgba(255,255,255,.7); text-decoration: none; }
+    footer a:hover { color: var(--white); }
+
+    @media (max-width: 600px) {
+      .info-card { padding: 20px; }
+      .form-card  { padding: 22px; }
+      .data-table { font-size: .82rem; }
+      .data-table th, .data-table td { padding: 8px 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="container nav-inner">
+    <a href="/" class="logo">
+      <img class="icon" src="images/38f1b9adb998611a9331c5247d2154b7.png" alt="SheliApp icon"/>
+      <img class="txt"  src="images/logo-txt2.svg" alt="SheliApp"/>
+    </a>
+    <a href="/" class="nav-home">← Back to Home</a>
+  </div>
+</nav>
+
+<!-- ── MAIN ── -->
+<main>
+  <div class="container">
+
+    <!-- Header -->
+    <div class="page-header">
+      <div class="page-tag">GDPR &amp; Account Privacy</div>
+      <h1>Delete Your SheliApp Account</h1>
+      <p>You have the right to request deletion of your account and personal data at any time. This page explains what gets deleted, what is retained, and how to submit your request.</p>
+    </div>
+
+    <!-- Info section -->
+    <div class="info-section">
+
+      <div class="info-card">
+        <h2>What happens when you delete your account</h2>
+        <p>Deleting your SheliApp account is permanent and cannot be undone. We will process your request within <strong>30 days</strong> in accordance with GDPR.</p>
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Data type</th>
+              <th>Action</th>
+              <th>Retention period</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Profile &amp; login credentials</td>
+              <td><span class="badge badge-deleted">Deleted</span></td>
+              <td>Immediately upon confirmation</td>
+            </tr>
+            <tr>
+              <td>Virtual pets &amp; pet data</td>
+              <td><span class="badge badge-deleted">Deleted</span></td>
+              <td>Immediately upon confirmation</td>
+            </tr>
+            <tr>
+              <td>In-game items &amp; inventory</td>
+              <td><span class="badge badge-deleted">Deleted</span></td>
+              <td>Immediately upon confirmation</td>
+            </tr>
+            <tr>
+              <td>Quest progress &amp; activity history</td>
+              <td><span class="badge badge-deleted">Deleted</span></td>
+              <td>Immediately upon confirmation</td>
+            </tr>
+            <tr>
+              <td>Friends list &amp; social connections</td>
+              <td><span class="badge badge-deleted">Deleted</span></td>
+              <td>Immediately upon confirmation</td>
+            </tr>
+            <tr>
+              <td>SheliCoin transaction logs</td>
+              <td><span class="badge badge-retained">Retained</span></td>
+              <td>Up to 7 years (legal / financial compliance obligation)</td>
+            </tr>
+            <tr>
+              <td>Anonymised aggregated analytics</td>
+              <td><span class="badge badge-retained">Retained</span></td>
+              <td>Indefinitely (no personal identifiers)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-card">
+        <h2>How to request account deletion</h2>
+        <p>Choose either method below. Both result in the same permanent deletion of your account.</p>
+
+        <h3>Option 1 — Inside the app</h3>
+        <ol class="step-list">
+          <li>Open SheliApp on your device and sign in.</li>
+          <li>Tap your profile avatar in the top-right corner.</li>
+          <li>Go to <strong>Settings → Account</strong>.</li>
+          <li>Tap <strong>Delete Account</strong> and follow the confirmation prompt.</li>
+        </ol>
+
+        <h3>Option 2 — Request via email form below</h3>
+        <ol class="step-list">
+          <li>Fill in the form on this page with the email address linked to your account.</li>
+          <li>We will send a confirmation link to that email address within a few minutes.</li>
+          <li>Click the link in the email to confirm and permanently delete your account.</li>
+        </ol>
+      </div>
+
+    </div>
+
+    <!-- Email deletion form -->
+    <div class="form-card" id="request-form-section">
+      <h2>Request deletion by email</h2>
+      <p>Enter the email address you used to register your SheliApp account. We will send you a secure confirmation link.</p>
+
+      <form id="deletion-form" novalidate>
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <input type="email" id="email" name="email" placeholder="you@example.com" required autocomplete="email"/>
+        </div>
+
+        <div class="form-group">
+          <label for="reason">Reason for leaving <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+          <textarea id="reason" name="reason" placeholder="Help us improve — your feedback is welcome but not required."></textarea>
+        </div>
+
+        <div class="checkbox-row">
+          <input type="checkbox" id="confirm" name="confirm" required/>
+          <label for="confirm">
+            I understand that deleting my account is <strong>permanent and irreversible</strong>,
+            and that all my pets, items, and progress will be permanently removed.
+          </label>
+        </div>
+
+        <button type="submit" class="btn-danger" id="submit-btn">Send Deletion Confirmation Email</button>
+
+        <div class="alert alert-success" id="alert-ok">
+          <strong>Email sent.</strong> Check your inbox for a confirmation link. The link expires in 24 hours.
+          If you do not receive it within a few minutes, check your spam folder.
+        </div>
+        <div class="alert alert-error" id="alert-err">
+          <strong>Something went wrong.</strong> <span id="alert-err-msg">Please try again later or contact us at <a href="mailto:support@sheli.app">support@sheli.app</a>.</span>
+        </div>
+
+        <p class="form-notice">
+          By submitting this form you confirm you are the account holder.
+          Need help? Email <a href="mailto:support@sheli.app" style="color:var(--accent)">support@sheli.app</a>.
+        </p>
+      </form>
+    </div>
+
+    <div class="divider">or</div>
+
+    <!-- In-app shortcut reminder -->
+    <div class="in-app-card">
+      <h3>Already have the app? Delete directly in Settings.</h3>
+      <p>The fastest way to delete your account is from inside SheliApp: <strong>Profile → Settings → Account → Delete Account</strong>. No email required — the change is immediate.</p>
+    </div>
+
+  </div>
+</main>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="container">
+    <p>© 2024 SheliApp. All rights reserved. &nbsp;·&nbsp;
+      <a href="/">Home</a> &nbsp;·&nbsp;
+      <a href="mailto:support@sheli.app">support@sheli.app</a>
+    </p>
+  </div>
+</footer>
+
+<script>
+  var form      = document.getElementById('deletion-form');
+  var submitBtn = document.getElementById('submit-btn');
+  var alertOk   = document.getElementById('alert-ok');
+  var alertErr  = document.getElementById('alert-err');
+  var alertErrMsg = document.getElementById('alert-err-msg');
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    var email   = document.getElementById('email').value.trim();
+    var confirm = document.getElementById('confirm').checked;
+
+    if (!email) {
+      showError('Please enter your email address.');
+      return;
+    }
+    if (!confirm) {
+      showError('Please check the confirmation box to proceed.');
+      return;
+    }
+
+    alertOk.style.display  = 'none';
+    alertErr.style.display = 'none';
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+
+    fetch('https://api.sheli.app/api/v2/gdpr/account/request-deletion', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email })
+    })
+    .then(function(r) {
+      if (r.ok) {
+        alertOk.style.display = 'block';
+        form.reset();
+      } else {
+        return r.json().catch(function() { return {}; }).then(function(body) {
+          var msg = (body && body.message) ? body.message
+            : 'No account found for that email address, or the request could not be processed.';
+          showError(msg);
+        });
+      }
+    })
+    .catch(function() {
+      showError('Could not reach the server. Please check your connection and try again, or email us at <a href="mailto:support@sheli.app">support@sheli.app</a>.');
+    })
+    .finally(function() {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send Deletion Confirmation Email';
+    });
+  });
+
+  function showError(msg) {
+    alertErrMsg.innerHTML = msg;
+    alertErr.style.display = 'block';
+    alertOk.style.display  = 'none';
+  }
+</script>
+
+</body>
+</html>
